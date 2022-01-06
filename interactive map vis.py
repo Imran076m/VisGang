@@ -1,60 +1,52 @@
-import geopandas as gpd
-
-dataset = "C:\\Users\\20203572\\Desktop\\Vis\\Accidents-2007-2008.csv"
-df = gpd.read_file(dataset)
-
-#df.head()
+import plotly.graph_objects as go
 
 
-
+import dash
+import dash_core_components as dcc
+import dash_html_components as html
+import plotly.express as px
 import pandas as pd
+
+df = pd.read_csv(r"C:\Users\20203572\Downloads\\Accidents-2009.csv")
 
 df = df[df.latitude != '?']
 df = df[df.longitude != '?']
-#df['Latitude'] = pd.to_numeric(df['Latitude'])
-
-#df['Longitude'] = pd.to_numeric(df['Longitude'])
-#df
-
-
 df['Latitude'] = pd.to_numeric(df['latitude'])
-
 df['Longitude'] = pd.to_numeric(df['longitude'])
-#df
-
-
-import folium
-map = folium.Map(location=[-0.209082	,51.506187], zoom_start=3)
-#loca = df.head()
-df = df.dropna(subset=['Latitude'])
-for _, i in df.loc[0:100].iterrows():
-    print(1)
-    folium.Marker(location=[i['Latitude'], i['Longitude']]).add_to(map)
-map
- 
 
 
 
 
-#gdf = gpd.GeoDataFrame(
-#    df, geometry=gpd.points_from_xy(df.Longitude, df.Latitude))
+import plotly.graph_objects as go
+
+
+dfs = df
+import plotly.express as px
+fig = px.density_mapbox(df, lat='Latitude', lon='Longitude', z='number_of_casualties', radius=3,
+                        center=dict(lat=54.5, lon=-3.943646), zoom=4.2, range_color=(0, 20),
+                        mapbox_style="stamen-terrain")
+
+fig.update_layout(
+        title = 'Accidents in 2009',
+        geo_scope='europe', 
+    )
+
+
+
+fig.update_layout(width=600, height=400, margin={"r":0,"t":0,"l":0,"b":0})
+
+fig.update_layout(
+        geo = dict(
+            projection_scale=8, 
+            center=dict(lat=54.5, lon=-3.943646),
+        ))
 
 
 
 
+app = dash.Dash()
+app.layout = html.Div([
+    dcc.Graph(figure=fig)
+])
 
-
-#world = gpd.read_file(
-#    gpd.datasets.get_path('naturalearth_lowres')
-#)
-#uk = world.query('country == "United Kingdom"')
-#import folium
-#import matplotlib
-#import mapclassify
-#world.columns=['pop_est', 'continent', 'name', 'CODE', 'gdp_md_est', 'geometry']
-
-#uk = world[world['name'] == 'United Kingdom']
-#gdf.explore()
-#ax = uk.plot()
-#gdf.head().plot(ax = ax)
-#uk.explore()
+app.run_server(debug=True, use_reloader=False) 
