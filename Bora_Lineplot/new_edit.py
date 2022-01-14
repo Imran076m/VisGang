@@ -48,7 +48,7 @@ def createDFrame(index):
     uninc_2['mean_severity'] = df_2.groupby('accident_year')['accident_severity'].mean().tolist()
     uninc_2['mean_casualty'] = df_2.groupby('accident_year')['number_of_casualties'].mean().tolist()
 
-    df_all_rows = pd.concat([uninc_1, uninc, uninc_2],ignore_index=True)
+    df_all_rows = pd.concat([uninc_1, uninc, uninc_3, uninc_2],ignore_index=True)
     return df_all_rows
     
    else:
@@ -80,7 +80,7 @@ def createDFrame(index):
     uninc_2['mean_severity'] = df_2.groupby('accident_year')['accident_severity'].mean().tolist()
     uninc_2['mean_casualty'] = df_2.groupby('accident_year')['number_of_casualties'].mean().tolist()
 
-    df_all_rows = pd.concat([uninc_1, uninc, uninc_2],ignore_index=True)
+    df_all_rows = pd.concat([uninc_1, uninc, uninc_3, uninc_2],ignore_index=True)
     return df_all_rows
         
     
