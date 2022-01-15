@@ -114,7 +114,15 @@ def update_bar(value):
           df_final = Accidents.outFrameBar(index)
           df_recent = df_final
        
-    fig = px.bar(df_final, x = "Count", y = "Time", orientation = "h", range_x = [0, 6000])
+    fig = fig = px.bar(df_final, y=df_final.index.get_level_values(0), 
+                       x="count",
+                       color= df_final.index.get_level_values(1),
+                       barmode = 'stack',
+                       orientation = "h"               
+                       )
+    
+    fig.update_layout(yaxis={'categoryorder':'array', 'categoryarray':['post-EC','EC','pre-EC']})
+    
     return fig
     
 app.run_server(debug=False, dev_tools_ui=False)
