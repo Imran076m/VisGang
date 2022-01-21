@@ -6,28 +6,12 @@ from dash.dependencies import Input, Output
 import pandas as pd
 import numpy as np
 from accidentdata import Accidents
-'''
-df_acc_pre = pd.read_csv("C:/Users/deniz/Desktop/TUe/Year 2/Q2/JBI100 - Visualisations/Databases/Accidents-2005-2006.csv", low_memory = False)
-df_acc_on = pd.read_csv("C:/Users/deniz/Desktop/TUe/Year 2/Q2/JBI100 - Visualisations/Databases/Accidents-2007-2008.csv", low_memory = False)
-df_acc_post = pd.read_csv("C:/Users/deniz/Desktop/TUe/Year 2/Q2/JBI100 - Visualisations/Databases/Accidents-2010-2011.csv", low_memory = False)
-    
-    
-df_acc_london_on = df_acc_pre[(df_acc_pre['police_force'] == 1) | (df_acc_pre['police_force'] == 48)]
-count_acc_london_on = len(df_acc_london_on[df_acc_london_on['accident_severity'] == 1].value_counts())
-count_acc_all_on = len(df_acc_on[df_acc_on['accident_severity'] == 1].value_counts())
-    
-df_fatal_acc_EC = pd.DataFrame(np.array([count_acc_london_on]), columns = ['Count'])
-df_fatal_acc_EC = df_fatal_acc_EC.set_axis(['London'], axis = 0)
-df_fatal_acc_EC['Region'] = ['London']
-'''
-saveValue = -1
+import plotly.graph_objects as go
 
-df = px.data.tips()
-days = df.day.unique()
-
-df_recent = pd.DataFrame()
 
 app = dash.Dash(__name__)
+
+#fig_map = Accidents.outMap()
 
 
 app.layout = html.Div([
@@ -91,6 +75,7 @@ app.layout = html.Div([
         clearable=False,
     ),
     dcc.Graph(id="bar-chart"),
+    dcc.Graph(id="pie-chart")
 ])
 
 @app.callback(
@@ -100,29 +85,44 @@ def update_bar(value):
     global df_recent
     global saveValue
     index = value
-    
-    if saveValue == -1:
-        saveValue = index
-        df_final = Accidents.outFrameBar(index)
-        df_recent = df_final
-        
-    else:
-        if saveValue == index:
-          df_final = df_recent
-        else:
-          saveValue = index
-          df_final = Accidents.outFrameBar(index)
-          df_recent = df_final
+    df_bar = Accidents.outFrameBar(index)
        
-    fig = fig = px.bar(df_final, y=df_final.index.get_level_values(0), 
+    fig = fig = px.bar(df_bar, y=df_bar.index.get_level_values(0), 
                        x="count",
-                       color= df_final.index.get_level_values(1),
+                       color= df_bar.index.get_level_values(1),
                        barmode = 'stack',
-                       orientation = "h"               
+                       orientation = "h",
+                       range_x = [0, 800000]
                        )
     
-    fig.update_layout(yaxis={'categoryorder':'array', 'categoryarray':['post-EC','EC','pre-EC']})
+    fig.update_layout(
+        yaxis={'categoryorder':'array', 'categoryarray':['post-EC','EC','pre-EC']},
+        xaxis_title = "Number of Fatal Casualties",
+        yaxis_title = "Time Era",
+        title = "Fatal Casualties Before, During and After the Economic Crisis"
+        )
     
+    return fig
+
+@app.callback(
+    Output("pie-chart", "figure"), 
+    [Input("dropdown", "value")])
+def update_pie(value):
+    index = value
+    df_pie = Accidents.outPie(index)
+    
+    fig = px.sunburst(df_pie, path=['Accident year', 'Injury'], 
+                  values='Count', color="Accident year",
+                  hover_name = 'Accident year',
+                  title = 'Sum of Casualties by Age Range',
+                  )
+
+    fig.update_traces(
+        go.Sunburst(hovertemplate='%{customdata[0]}<br> Sum:%{value:,.0f}'),
+        insidetextorientation='radial')
+
+
+     
     return fig
     
 app.run_server(debug=False, dev_tools_ui=False)
