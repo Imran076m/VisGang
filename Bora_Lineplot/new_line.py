@@ -12,7 +12,7 @@ import dash_html_components as html
 from dash.dependencies import Input, Output
 import plotly.express as px
 import pandas as pd
-import new_edit as ed
+import Bora_Final_Data as ed
 
 saveValue = -1
 
@@ -108,7 +108,9 @@ def update_line_chart(value):
           
     #x, y = 'year', 'total_accident'
     
-    fig = px.line(df_final, x='year', y='mean_casualty')    
+    fig = px.line(df_final, x='year', y='total_accident', title="Total Number of Accidents Throughout The Years",
+                  labels=dict(total_accident="Total Number of Accidents", year="Year"), markers=True)
+    fig.update(layout_yaxis_range = [0,300000])    
     return fig
 
 
