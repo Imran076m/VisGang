@@ -215,6 +215,29 @@ class Accidents():
                 ))
             
         return fig
+    
+    def outLine(index):
+        df_final = Accidents.df_final.copy()
+        
+        if (index != 0): 
+      
+            df_1 = df_final
+            df_1 = df_1[df_1['police_force'] == index]
+            uninc_1 = pd.DataFrame(columns = ['year', 'total_accident','mean_casualty'])
+            uninc_1['year'] = df_1['accident_year'].unique()
+            uninc_1['total_accident'] = df_1.groupby('accident_year').size().tolist()
+            uninc_1['mean_casualty'] = df_1.groupby('accident_year')['casualty_severity'].mean().tolist()
+    
+            return uninc_1
+        
+        else:
+            df_2 = df_final
+            uninc_2 = pd.DataFrame(columns = ['year', 'total_accident','mean_casualty'])
+            uninc_2['year'] = df_2['accident_year'].unique()
+            uninc_2['total_accident'] = df_2.groupby('accident_year').size().tolist()
+            uninc_2['mean_casualty'] = df_2.groupby('accident_year')['casualty_severity'].mean().tolist()
+       
+        return uninc_2
 
 
             

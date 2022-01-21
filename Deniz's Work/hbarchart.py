@@ -75,15 +75,14 @@ app.layout = html.Div([
         clearable=False,
     ),
     dcc.Graph(id="bar-chart"),
-    dcc.Graph(id="pie-chart")
+    dcc.Graph(id="pie-chart"),
+    dcc.Graph(id="line-chart")
 ])
 
 @app.callback(
     Output("bar-chart", "figure"), 
     [Input("dropdown", "value")])
 def update_bar(value):
-    global df_recent
-    global saveValue
     index = value
     df_bar = Accidents.outFrameBar(index)
        
@@ -123,6 +122,18 @@ def update_pie(value):
 
 
      
+    return fig
+
+@app.callback(
+    Output("line-chart", "figure"), 
+    [Input("dropdown", "value")])
+def update_line_chart(value):
+    index = value
+    df_line = Accidents.outLine(index)
+    
+    fig = px.line(df_line, x='year', y='total_accident', title="Total Number of Accidents Throughout The Years",
+                  labels=dict(total_accident="Total Number of Accidents", year="Year"), markers=True)
+    fig.update(layout_yaxis_range = [0,300000])    
     return fig
     
 app.run_server(debug=False, dev_tools_ui=False)
