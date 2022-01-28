@@ -191,15 +191,11 @@ def update_line_chart(value):
                 geo_scope='europe', 
                 )
 
-<<<<<<< Updated upstream
-    fig.update_layout(width=600, height=600)
-=======
     fig.update_layout(width=750, height=400, margin={"r":0,"t":50,"l":50,"b":0},
             font=dict(
                 color="white",
                 size=12
             ))
->>>>>>> Stashed changes
 
     fig.update_layout(
         geo = dict(
