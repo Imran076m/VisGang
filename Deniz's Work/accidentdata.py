@@ -9,11 +9,7 @@ class Accidents():
     #df_po_pre = pd.read_csv("C:/Users/deniz/Desktop/TUe/Year 2/Q2/JBI100 - Visualisations/Databases/Accidents-2004-2006.csv", low_memory = False)
     #df_po_on = pd.read_csv("C:/Users/deniz/Desktop/TUe/Year 2/Q2/JBI100 - Visualisations/Databases/Accidents-2007-2009.csv", low_memory = False)
     #df_po_post = pd.read_csv("C:/Users/deniz/Desktop/TUe/Year 2/Q2/JBI100 - Visualisations/Databases/Accidents-2010-2012.csv", low_memory = False)
-<<<<<<< Updated upstream
-    df_final = pd.read_csv("C:/Users/deniz/Desktop/TUe/Year 2/Q2/JBI100 - Visualisations/Databases/FinalDatasetV2.csv", low_memory = False)
-=======
     df_final = pd.read_csv("C:/Users/20203572/Downloads/FinalDatasetV2.csv", low_memory = False)
->>>>>>> Stashed changes
     def outFrameBar(index):
         df_final = Accidents.df_final.copy()
         if index != 0:
@@ -202,22 +198,7 @@ class Accidents():
         df_map['Latitude'] = pd.to_numeric(df_map['latitude'])
         df_map['Longitude'] = pd.to_numeric(df_map['longitude'])
             
-<<<<<<< Updated upstream
         return df_map
-=======
-        fig = px.density_mapbox(df_map, lat='Latitude', lon='Longitude', z='number_of_casualties', radius=3,
-                    center=dict(lat=54.5, lon=-3.943646), zoom=4.2, range_color=(0, 20),
-                    mapbox_style="stamen-terrain")
-
-        fig.update_layout(title = 'Number of Casualties',  geo_scope='europe', width=600, height=400, margin={"r":10,"t":50,"l":10,"b":0}, 
-        geo = dict(
-            projection_scale=5, 
-            center=dict(lat=54.5, lon=-3.943646),
-        ))
-
-            
-        return fig
->>>>>>> Stashed changes
     
     def outLine(index):
         df_final = Accidents.df_final.copy()

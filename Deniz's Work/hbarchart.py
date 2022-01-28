@@ -7,19 +7,15 @@ import pandas as pd
 import numpy as np
 from accidentdata import Accidents
 import plotly.graph_objects as go
+import dash_bootstrap_components as dbc
 
 
-app = dash.Dash(__name__)
-
-<<<<<<< Updated upstream
-
-=======
-fig_map = Accidents.outMap()
->>>>>>> Stashed changes
+app = dash.Dash(__name__, 
+external_stylesheets=[dbc.themes.SUPERHERO])
 
 
 app.layout = html.Div([
-    dcc.Dropdown(
+   dbc.Row(dbc.Col(dcc.Dropdown(
         id="dropdown-region",
         options=[
             {"label": "Entire United Kingdom", "value": 0},
@@ -76,16 +72,16 @@ app.layout = html.Div([
             {"label": "Dumfries and Galloway", "value": 98},
             ],
         value=0,
-        clearable=False,
-    ),
-    dcc.Graph(id="bar-chart"),
-    dcc.Graph(id="pie-chart"),
-    dcc.Graph(id="line-chart"),
-<<<<<<< Updated upstream
-    dcc.Dropdown(
-        id="dropdown-year",
+        clearable=False
+        
+    ))),
+
+    dbc.Row([dbc.Col(dcc.Graph(id="bar-chart"), width={'size': 6}),
+
+            dbc.Col(dcc.Graph(id="line-chart"), width={'size': 6})]),
+
+    dbc.Row([dbc.Col(html.Div([dcc.Dropdown(id="dropdown-year",
         options=[
-            
             {"label": "2004", "value": 2004},
             {"label": "2005", "value": 2005},
             {"label": "2006", "value": 2006},
@@ -97,13 +93,16 @@ app.layout = html.Div([
             {"label": "2012", "value": 2012},
             ],
         value=2004,
-        clearable=False,
-        ),
-    dcc.Graph(id="map-chart")
-=======
-    dcc.Graph(figure=fig_map)
->>>>>>> Stashed changes
+        clearable=False
+        
+        ),dcc.Graph(id="map-chart")]),
+        width={'size': 6}),
+
+            dbc.Col(dcc.Graph(id="pie-chart"), width={'size': 6})])
+
 ])
+
+
 
 @app.callback(
     Output("bar-chart", "figure"), 
@@ -127,6 +126,11 @@ def update_bar(value):
         title = "Fatal Casualties Before, During and After the Economic Crisis"
         )
     
+    fig.update_layout(plot_bgcolor='rgba(0, 0, 0, 0)',paper_bgcolor='rgba(0, 0, 0, 0)',font=dict(
+                color="white",
+                size=12
+            ))
+    
     return fig
 
 @app.callback(
@@ -146,12 +150,17 @@ def update_pie(value):
         go.Sunburst(hovertemplate='%{customdata[0]}<br> Sum:%{value:,.0f}'),
         insidetextorientation='radial')
 
+    fig.update_layout(plot_bgcolor='rgba(0, 0, 0, 0)',paper_bgcolor='rgba(0, 0, 0, 0)',font=dict(
+                color="white",
+                size=12
+            ))
+
 
      
     return fig
 
 @app.callback(
-    Output("map-chart", "figure"), 
+    Output("line-chart", "figure"), 
     [Input("dropdown-region", "value")])
 def update_line_chart(value):
     index = value
@@ -160,31 +169,45 @@ def update_line_chart(value):
     fig = px.line(df_line, x='year', y='total_accident', title="Total Number of Accidents Throughout The Years",
                   labels=dict(total_accident="Total Number of Accidents", year="Year"), markers=True)
     fig.update(layout_yaxis_range = [0,300000])    
+    fig.update_layout(plot_bgcolor='rgba(0, 0, 0, 0)',paper_bgcolor='rgba(0, 0, 0, 0)',font=dict(
+                color="white",
+                size=12
+            ))
     return fig
 
 @app.callback(
-    Output("line-chart", "figure"), 
+    Output("map-chart", "figure"), 
     [Input("dropdown-year", "value")])
 def update_line_chart(value):
     index = value
     df_map = Accidents.outMap(index)
     
     fig = px.density_mapbox(df_map, lat='Latitude', lon='Longitude', z='number_of_casualties', radius=3,
-                    center=dict(lat=54.5, lon=-3.943646), zoom=4.2, range_color=(0, 20),
-                    mapbox_style="stamen-terrain")
+                    center=dict(lat=54.5, lon=-3.943646), zoom=4, range_color=(0, 20),
+                    mapbox_style="stamen-terrain", labels=dict(number_of_casualties="Total Number of Casualties"))
 
     fig.update_layout(
-                title = 'Accidents in 2009',
+                title = 'Density Map of The Number of Casualties in the UK',
                 geo_scope='europe', 
                 )
 
+<<<<<<< Updated upstream
     fig.update_layout(width=600, height=600)
+=======
+    fig.update_layout(width=750, height=400, margin={"r":0,"t":50,"l":50,"b":0},
+            font=dict(
+                color="white",
+                size=12
+            ))
+>>>>>>> Stashed changes
 
     fig.update_layout(
         geo = dict(
         projection_scale=8, 
         center=dict(lat=54.5, lon=-3.943646),
                 ))
+
+    fig.update_layout(plot_bgcolor='rgba(0, 0, 0, 0)',paper_bgcolor='rgba(0, 0, 0, 0)')
     
     return fig
 
