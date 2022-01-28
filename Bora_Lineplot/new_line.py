@@ -23,6 +23,7 @@ app = dash.Dash(__name__)
 
 app.layout = html.Div([
     dcc.Graph(id="graph"),
+    dcc.Graph(id="graph_mean"),
     dcc.Dropdown(
         id="dropdown",
         options=[
@@ -110,8 +111,37 @@ def update_line_chart(value):
     
     fig = px.line(df_final, x='year', y='total_accident', title="Total Number of Accidents Throughout The Years",
                   labels=dict(total_accident="Total Number of Accidents", year="Year"), markers=True)
-    fig.update(layout_yaxis_range = [0,300000])    
+    fig.update(layout_yaxis_range = [0,300000]) 
     return fig
+
+@app.callback(
+    Output("graph_mean", "figure"), 
+    [Input("dropdown", "value")])
+def update_line_chart_1(value):
+    global df_recent
+    global saveValue
+    index = value
+    
+    if saveValue == -1:
+        saveValue = index
+        df_final = ed.createDFrame(index)
+        df_recent = df_final
+        
+    else:
+        if saveValue == index:
+          df_final = df_recent
+        else:
+          saveValue = index
+          df_final = ed.createDFrame(index)
+          df_recent = df_final
+          
+    #x, y = 'year', 'total_accident'
+    
+   
+    fig_1 = px.line(df_final, x='year', y='mean_casualty', title="Mean Casualty Throughout The Years",
+                  labels=dict(mean_casualty="Mean Casualty", year="Year"), markers=True)
+    fig_1.update(layout_yaxis_range = [0,3])
+    return fig_1
 
 
 if __name__ == "__main__":
