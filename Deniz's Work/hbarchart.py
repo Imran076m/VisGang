@@ -11,7 +11,11 @@ import plotly.graph_objects as go
 
 app = dash.Dash(__name__)
 
+<<<<<<< Updated upstream
 
+=======
+fig_map = Accidents.outMap()
+>>>>>>> Stashed changes
 
 
 app.layout = html.Div([
@@ -77,6 +81,7 @@ app.layout = html.Div([
     dcc.Graph(id="bar-chart"),
     dcc.Graph(id="pie-chart"),
     dcc.Graph(id="line-chart"),
+<<<<<<< Updated upstream
     dcc.Dropdown(
         id="dropdown-year",
         options=[
@@ -95,6 +100,9 @@ app.layout = html.Div([
         clearable=False,
         ),
     dcc.Graph(id="map-chart")
+=======
+    dcc.Graph(figure=fig_map)
+>>>>>>> Stashed changes
 ])
 
 @app.callback(
