@@ -178,7 +178,7 @@ def update_line_chart(value):
                 geo_scope='europe', 
                 )
 
-    fig.update_layout(width=600, height=400, margin={"r":0,"t":0,"l":0,"b":0})
+    fig.update_layout(width=600, height=600)
 
     fig.update_layout(
         geo = dict(
