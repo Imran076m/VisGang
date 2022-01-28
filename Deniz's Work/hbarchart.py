@@ -11,12 +11,12 @@ import plotly.graph_objects as go
 
 app = dash.Dash(__name__)
 
-#fig_map = Accidents.outMap()
+
 
 
 app.layout = html.Div([
     dcc.Dropdown(
-        id="dropdown",
+        id="dropdown-region",
         options=[
             {"label": "Entire United Kingdom", "value": 0},
             {"label": "London", "value": 1},
@@ -76,12 +76,30 @@ app.layout = html.Div([
     ),
     dcc.Graph(id="bar-chart"),
     dcc.Graph(id="pie-chart"),
-    dcc.Graph(id="line-chart")
+    dcc.Graph(id="line-chart"),
+    dcc.Dropdown(
+        id="dropdown-year",
+        options=[
+            
+            {"label": "2004", "value": 2004},
+            {"label": "2005", "value": 2005},
+            {"label": "2006", "value": 2006},
+            {"label": "2007", "value": 2007},
+            {"label": "2008", "value": 2008},
+            {"label": "2009", "value": 2009},
+            {"label": "2010", "value": 2010},
+            {"label": "2011", "value": 2011},
+            {"label": "2012", "value": 2012},
+            ],
+        value=2004,
+        clearable=False,
+        ),
+    dcc.Graph(id="map-chart")
 ])
 
 @app.callback(
     Output("bar-chart", "figure"), 
-    [Input("dropdown", "value")])
+    [Input("dropdown-region", "value")])
 def update_bar(value):
     index = value
     df_bar = Accidents.outFrameBar(index)
@@ -105,7 +123,7 @@ def update_bar(value):
 
 @app.callback(
     Output("pie-chart", "figure"), 
-    [Input("dropdown", "value")])
+    [Input("dropdown-region", "value")])
 def update_pie(value):
     index = value
     df_pie = Accidents.outPie(index)
@@ -125,8 +143,8 @@ def update_pie(value):
     return fig
 
 @app.callback(
-    Output("line-chart", "figure"), 
-    [Input("dropdown", "value")])
+    Output("map-chart", "figure"), 
+    [Input("dropdown-region", "value")])
 def update_line_chart(value):
     index = value
     df_line = Accidents.outLine(index)
@@ -135,5 +153,32 @@ def update_line_chart(value):
                   labels=dict(total_accident="Total Number of Accidents", year="Year"), markers=True)
     fig.update(layout_yaxis_range = [0,300000])    
     return fig
+
+@app.callback(
+    Output("line-chart", "figure"), 
+    [Input("dropdown-year", "value")])
+def update_line_chart(value):
+    index = value
+    df_map = Accidents.outMap(index)
     
+    fig = px.density_mapbox(df_map, lat='Latitude', lon='Longitude', z='number_of_casualties', radius=3,
+                    center=dict(lat=54.5, lon=-3.943646), zoom=4.2, range_color=(0, 20),
+                    mapbox_style="stamen-terrain")
+
+    fig.update_layout(
+                title = 'Accidents in 2009',
+                geo_scope='europe', 
+                )
+
+    fig.update_layout(width=600, height=400, margin={"r":0,"t":0,"l":0,"b":0})
+
+    fig.update_layout(
+        geo = dict(
+        projection_scale=8, 
+        center=dict(lat=54.5, lon=-3.943646),
+                ))
+    
+    return fig
+
+
 app.run_server(debug=False, dev_tools_ui=False)
