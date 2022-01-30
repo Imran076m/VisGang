@@ -116,6 +116,7 @@ def update_bar(value):
                        color= df_bar.index.get_level_values(1),
                        barmode = 'stack',
                        orientation = "h",
+                       color_discrete_map={'25 - 34': 'yellow'},
                        range_x = [0, 800000]
                        )
     
@@ -144,6 +145,7 @@ def update_pie(value):
                   values='Count', color="Accident year",
                   hover_name = 'Accident year',
                   title = 'Sum of Casualties by Age Range',
+                  color_discrete_map ={'Fatal Injury': 'red', 'Serious Injury': 'yellow', 'Slight Injury': 'purple'}
                   )
 
     fig.update_traces(
