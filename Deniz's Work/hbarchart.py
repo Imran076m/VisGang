@@ -15,7 +15,22 @@ external_stylesheets=[dbc.themes.SUPERHERO])
 
 
 app.layout = html.Div([
-   dbc.Row(dbc.Col(dcc.Dropdown(
+   dbc.Row([dbc.Col(dcc.Dropdown(id="dropdown-year",
+        options=[
+            {"label": "2004", "value": 2004},
+            {"label": "2005", "value": 2005},
+            {"label": "2006", "value": 2006},
+            {"label": "2007", "value": 2007},
+            {"label": "2008", "value": 2008},
+            {"label": "2009", "value": 2009},
+            {"label": "2010", "value": 2010},
+            {"label": "2011", "value": 2011},
+            {"label": "2012", "value": 2012},
+            ],
+        value=2004,
+        clearable=False), width={'size': 6}),
+
+    dbc.Col(dcc.Dropdown(
         id="dropdown-region",
         options=[
             {"label": "Entire United Kingdom", "value": 0},
@@ -72,35 +87,31 @@ app.layout = html.Div([
             {"label": "Dumfries and Galloway", "value": 98},
             ],
         value=0,
-        clearable=False
+        clearable=False), width={'size': 6})]),
+
+    dbc.Row([dbc.Col(html.Div(dcc.Graph(id="map-chart")), width={'size': 6}),
+
+           dbc.Col(html.Div(dcc.Graph(id="bar-chart")), width={'size': 6})]),
+           
+           
+    dbc.Row([dbc.Col(html.Div(), width={'size': 6}),
+
+           dbc.Col(html.Div(dcc.Graph(id="line-chart")), width={'size': 6})]),
+           
+    
+    dbc.Row([dbc.Col(html.Div(), width={'size': 6}),
+
+           dbc.Col(html.Div(dcc.Graph(id="pie-chart")), width={'size': 6})]),
+           ])
+
+    #dbc.Row(dbc.Col(html.Div(
         
-    ))),
+     #   ),dcc.Graph(id="map-chart")),
+      #  width={'size': 6}),
 
-    dbc.Row([dbc.Col(dcc.Graph(id="bar-chart"), width={'size': 6}),
+       #     dbc.Col(dcc.Graph(id="pie-chart"), width={'size': 6})])
 
-            dbc.Col(dcc.Graph(id="line-chart"), width={'size': 6})]),
 
-    dbc.Row([dbc.Col(html.Div([dcc.Dropdown(id="dropdown-year",
-        options=[
-            {"label": "2004", "value": 2004},
-            {"label": "2005", "value": 2005},
-            {"label": "2006", "value": 2006},
-            {"label": "2007", "value": 2007},
-            {"label": "2008", "value": 2008},
-            {"label": "2009", "value": 2009},
-            {"label": "2010", "value": 2010},
-            {"label": "2011", "value": 2011},
-            {"label": "2012", "value": 2012},
-            ],
-        value=2004,
-        clearable=False
-        
-        ),dcc.Graph(id="map-chart")]),
-        width={'size': 6}),
-
-            dbc.Col(dcc.Graph(id="pie-chart"), width={'size': 6})])
-
-])
 
 
 
