@@ -94,22 +94,23 @@ app.layout = html.Div([
            dbc.Col(html.Div(dcc.Graph(id="bar-chart")), width={'size': 6})]),
            
            
-    dbc.Row([dbc.Col(html.Div(), width={'size': 6}),
+    dbc.Row([dbc.Col(html.Div([
+        html.H1(''),
+        html.H1('About Zoom'),
+        html.Div([
+            html.P(''),
+            html.P("    Our tool, Zoom, is created for the Road and Safety Authority of the United Kingdom (R&S) with the purpose of understand how the UK’s GDP and economic status, throughout the 2008 recession, effected driving quality in the UK. We would like to help R&S explore how unemployment and economical depressions effect the driving quality of the general public. We believe understanding such a topic would allow R&S to regulate the driving course and syllabus that is taught while getting a license, as it would allow the general public to drive under worse psychological conditions."),
+            html.P(''),
+            html.P('    We have chosen to driving quality based on casualty severity, the number of casualties, the age groups that are involved in these causalities, and other aspects. We also believe it would be essential to analyze these casualties over different age groups, day of the weeks, and through a multitude of years as well.')
+    ])
+]), width={'size': 6}),
 
            dbc.Col(html.Div(dcc.Graph(id="line-chart")), width={'size': 6})]),
            
     
-    dbc.Row([dbc.Col(html.Div(), width={'size': 6}),
-
+    dbc.Row([dbc.Col(html.Div([html.H1('Imran Makan 1577735', style={'fontSize': 26} ), html.H1('Adam Ibrahim 1542613', style={'fontSize': 26}), html.H1('Bora Ozen 1555685', style={'fontSize': 26}), html.H1('Deniz Erim 1533223', style={'fontSize': 26})]), width={'size': 6}),
            dbc.Col(html.Div(dcc.Graph(id="pie-chart")), width={'size': 6})]),
            ])
-
-    #dbc.Row(dbc.Col(html.Div(
-        
-     #   ),dcc.Graph(id="map-chart")),
-      #  width={'size': 6}),
-
-       #     dbc.Col(dcc.Graph(id="pie-chart"), width={'size': 6})])
 
 
 
