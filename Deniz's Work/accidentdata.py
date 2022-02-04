@@ -4,7 +4,7 @@ import pandas as pd
 class Accidents():
     
     #Reading the final csv file
-    df_final = pd.read_csv('Dataset\FinalDatasetV2.csv', low_memory = False)
+    df_final = pd.read_csv('FinalDatasetV2.csv', low_memory = False)
     
     #Function which outputs the desired dataset for the bar plot
     def outFrameBar(index):
