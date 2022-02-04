@@ -1,17 +1,16 @@
 import pandas as pd
-import plotly.express as px
+
 
 class Accidents():
     
-    #df_acc_pre = pd.read_csv("C:/Users/deniz/Desktop/TUe/Year 2/Q2/JBI100 - Visualisations/Databases/Casualty-2004-2006.csv", low_memory = False)
-    #df_acc_on = pd.read_csv("C:/Users/deniz/Desktop/TUe/Year 2/Q2/JBI100 - Visualisations/Databases/Casualty-2007-2009.csv", low_memory = False)
-    #df_acc_post = pd.read_csv("C:/Users/deniz/Desktop/TUe/Year 2/Q2/JBI100 - Visualisations/Databases/Casualty-2010-2012.csv", low_memory = False)
-    #df_po_pre = pd.read_csv("C:/Users/deniz/Desktop/TUe/Year 2/Q2/JBI100 - Visualisations/Databases/Accidents-2004-2006.csv", low_memory = False)
-    #df_po_on = pd.read_csv("C:/Users/deniz/Desktop/TUe/Year 2/Q2/JBI100 - Visualisations/Databases/Accidents-2007-2009.csv", low_memory = False)
-    #df_po_post = pd.read_csv("C:/Users/deniz/Desktop/TUe/Year 2/Q2/JBI100 - Visualisations/Databases/Accidents-2010-2012.csv", low_memory = False)
+    #Reading the final csv file
     df_final = pd.read_csv('Dataset\FinalDatasetV2.csv', low_memory = False)
+    
+    #Function which outputs the desired dataset for the bar plot
     def outFrameBar(index):
         df_final = Accidents.df_final.copy()
+        
+        #Dataset when a specific region is selected from the dropdown menu
         if index != 0:
             
             df_acc_on = df_final[(df_final["accident_year"] >= 2007) & (df_final["accident_year"] <= 2009)] 
@@ -62,7 +61,8 @@ class Accidents():
             frames = [df_age_post, df_age_on, df_age_pre]
             df_bar = pd.concat(frames)
             return df_bar
-            
+        
+        #Dataset for the entire UK
         else:
             
             
@@ -113,10 +113,11 @@ class Accidents():
             df_bar = pd.concat(frames)
             return df_bar
         
-        
+    #Function which outputs the desired dataset for the pie chart    
     def outPie(index):
         df_final = Accidents.df_final.copy()
         
+        #Dataset when a specific region is selected from the dropdown menu
         if index != 0:
             df = df_final[['accident_year', 'casualty_severity', 'age_of_casualty', 'police_force']]
             drop = df[df.age_of_casualty == -1]
@@ -153,6 +154,7 @@ class Accidents():
             new_df = new_df.rename(columns={'casualty_severity': 'Injury', 'accident_year': 'Count'})
             return new_df
         
+        #Dataset for the entire UK
         else:
             
             df = df_final[['accident_year', 'casualty_severity', 'age_of_casualty']]
@@ -188,7 +190,8 @@ class Accidents():
                                })
             new_df = new_df.rename(columns={'casualty_severity': 'Injury', 'accident_year': 'Count'})
             return new_df
-            
+    
+    #Function which outputs the desired dataset for the density map plot plot        
     def outMap(index):
         
         df_map = Accidents.df_final.copy()
@@ -200,26 +203,27 @@ class Accidents():
             
         return df_map
     
+    #Function which outputs the desired dataset for the line plot
     def outLine(index):
         df_final = Accidents.df_final.copy()
         
+        #Dataset when a specific region is selected from the dropdown menu
         if (index != 0): 
       
             df_1 = df_final
             df_1 = df_1[df_1['police_force'] == index]
-            uninc_1 = pd.DataFrame(columns = ['year', 'total_accident','mean_casualty'])
+            uninc_1 = pd.DataFrame(columns = ['year', 'total_accident'])
             uninc_1['year'] = df_1['accident_year'].unique()
             uninc_1['total_accident'] = df_1.groupby('accident_year').size().tolist()
-            uninc_1['mean_casualty'] = df_1.groupby('accident_year')['casualty_severity'].mean().tolist()
-    
+            
             return uninc_1
         
+        #Dataset for the entire UK
         else:
             df_2 = df_final
-            uninc_2 = pd.DataFrame(columns = ['year', 'total_accident','mean_casualty'])
+            uninc_2 = pd.DataFrame(columns = ['year', 'total_accident'])
             uninc_2['year'] = df_2['accident_year'].unique()
             uninc_2['total_accident'] = df_2.groupby('accident_year').size().tolist()
-            uninc_2['mean_casualty'] = df_2.groupby('accident_year')['casualty_severity'].mean().tolist()
        
         return uninc_2
 

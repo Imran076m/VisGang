@@ -3,18 +3,19 @@ from dash import dcc
 from dash import html
 import plotly.express as px
 from dash.dependencies import Input, Output
-import pandas as pd
-import numpy as np
 from accidentdata import Accidents
 import plotly.graph_objects as go
 import dash_bootstrap_components as dbc
 
 
+#Initializes the dash app
 app = dash.Dash(__name__, 
 external_stylesheets=[dbc.themes.SUPERHERO])
 
-
+#Layout for the dash app
 app.layout = html.Div([
+    
+   #Row for the dropdowns 
    dbc.Row([dbc.Col(dcc.Dropdown(id="dropdown-year",
         options=[
             {"label": "2004", "value": 2004},
@@ -88,12 +89,13 @@ app.layout = html.Div([
             ],
         value=0,
         clearable=False), width={'size': 6})]),
-
+   
+    #Row for the density map plot and bar plot   
     dbc.Row([dbc.Col(html.Div(dcc.Graph(id="map-chart")), width={'size': 6}),
 
            dbc.Col(html.Div(dcc.Graph(id="bar-chart")), width={'size': 6})]),
            
-           
+    #Row for the about part and the line plot       
     dbc.Row([dbc.Col(html.Div([
         html.H1(''),
         html.H1('About Zoom'),
@@ -107,7 +109,7 @@ app.layout = html.Div([
 
            dbc.Col(html.Div(dcc.Graph(id="line-chart")), width={'size': 6})]),
            
-    
+    #Row for the student information and pie chart
     dbc.Row([dbc.Col(html.Div([html.H1('Imran Makan 1577735', style={'fontSize': 26} ), html.H1('Adam Ibrahim 1542613', style={'fontSize': 26}), html.H1('Bora Ozen 1555685', style={'fontSize': 26}), html.H1('Deniz Erim 1533223', style={'fontSize': 26})]), width={'size': 6}),
            dbc.Col(html.Div(dcc.Graph(id="pie-chart")), width={'size': 6})]),
            ])
@@ -115,14 +117,15 @@ app.layout = html.Div([
 
 
 
-
+#Update function for the bar plot
 @app.callback(
     Output("bar-chart", "figure"), 
     [Input("dropdown-region", "value")])
 def update_bar(value):
     index = value
     df_bar = Accidents.outFrameBar(index)
-       
+     
+    #Plotting the bar plot
     fig = fig = px.bar(df_bar, y=df_bar.index.get_level_values(0), 
                        x="count",
                        color= df_bar.index.get_level_values(1),
@@ -146,6 +149,7 @@ def update_bar(value):
     
     return fig
 
+#Update function for the sunburst plot
 @app.callback(
     Output("pie-chart", "figure"), 
     [Input("dropdown-region", "value")])
@@ -153,6 +157,7 @@ def update_pie(value):
     index = value
     df_pie = Accidents.outPie(index)
     
+    #Plotting the sunburst plot
     fig = px.sunburst(df_pie, path=['Accident year', 'Injury'], 
                   values='Count', color="Accident year",
                   hover_name = 'Accident year',
@@ -161,7 +166,7 @@ def update_pie(value):
                   )
 
     fig.update_traces(
-        go.Sunburst(hovertemplate='%{customdata[0]}<br> Sum:%{value:,.0f}'),
+        go.Sunburst(hovertemplate='%{customdata[0]}<br> Sum:%{value:,.0f} "%{label}<br>%{percentEntry:.2%}"'),
         insidetextorientation='radial')
 
     fig.update_layout(plot_bgcolor='rgba(0, 0, 0, 0)',paper_bgcolor='rgba(0, 0, 0, 0)',font=dict(
@@ -169,10 +174,11 @@ def update_pie(value):
                 size=12
             ))
 
-
+    fig.update_traces(texttemplate="%{label}<br>%{percentEntry:.2%}")
      
     return fig
 
+#Update function for the line plot
 @app.callback(
     Output("line-chart", "figure"), 
     [Input("dropdown-region", "value")])
@@ -180,6 +186,7 @@ def update_line_chart(value):
     index = value
     df_line = Accidents.outLine(index)
     
+    #Plotting the line plot
     fig = px.line(df_line, x='year', y='total_accident', title="Total Number of Accidents Throughout The Years",
                   labels=dict(total_accident="Total Number of Accidents", year="Year"), markers=True)
     fig.update(layout_yaxis_range = [0,300000])    
@@ -187,15 +194,18 @@ def update_line_chart(value):
                 color="white",
                 size=12
             ))
+    
     return fig
 
+#Update function for the density map plot
 @app.callback(
     Output("map-chart", "figure"), 
     [Input("dropdown-year", "value")])
-def update_line_chart(value):
+def update_map_chart(value):
     index = value
     df_map = Accidents.outMap(index)
     
+    #Plotting the density map plot
     fig = px.density_mapbox(df_map, lat='Latitude', lon='Longitude', z='number_of_casualties', radius=3,
                     center=dict(lat=54.5, lon=-3.943646), zoom=4, range_color=(0, 20),
                     mapbox_style="stamen-terrain", labels=dict(number_of_casualties="Total Number of Casualties"))
