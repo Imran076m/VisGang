@@ -167,7 +167,7 @@ def update_pie(value):
     fig = px.sunburst(df_pie, path=['Accident year', 'Injury'], 
                   values='Count', color="Accident year",
                   hover_name = 'Accident year',
-                  title = 'Sum of Casualties by Age Range',
+                  title = 'Sum of Casualties by Casualty Severity Throughout the Years',
                   color_discrete_map ={'Fatal Injury': 'red', 'Serious Injury': 'yellow', 'Slight Injury': 'purple'}
                   )
 
